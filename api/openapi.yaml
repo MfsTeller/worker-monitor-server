@@ -1,0 +1,93 @@
+openapi: 3.0.2
+info:
+  title: worker-monitor management API
+  description: The API manages worker-monitor client data.
+  contact:
+    name: API support
+    url: https://github.com/MfsTeller/worker-monitor-server
+  license:
+    name: MIT
+    url: https://github.com/MfsTeller/worker-monitor-server/blob/master/LICENSE
+  version: 1.0.0
+servers:
+  - url: http://192.168.99.100:8080
+    description: Local server deployed by docker toolbox
+paths:
+  /clientdata:
+    get:
+      tags: 
+        - ClientData
+      summary: Get target client data
+      description: Returns JSON of client data
+      parameters: []
+      responses:
+        '200':
+          description: A JSON of client data
+          content:
+            application/json:
+              schema: 
+                type: array
+                items:
+                  $ref: '#/components/schemas/ClientData'
+    post:
+      tags: 
+        - ClientData
+      summary: Register target client data
+      description: Registers JSON of client data
+      parameters: []
+      requestBody:
+        description: JSON data for registration
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/ClientData'
+      responses:
+        '200':
+          description: A JSON data is posted
+  /clientdata/{clientID}:
+    get:
+      tags: 
+        - ClientData
+      summary: Get target client data by client ID
+      description: Returns JSON of client data by ID
+      parameters:
+        - in: path
+          name: clientID
+          schema:
+            type: integer
+            format: int64
+          required: true
+      responses:
+        '200':
+          description: A JSON of client data by ID
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ClientData'
+components:
+  schemas:
+    ClientData:
+      type: object
+      required:
+        - client_id
+      properties:
+        client_id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: Taro Sato
+        startup_datetime:
+          type: string
+          example: 2020/04/30 09:31:33
+        shutdown_datetime:
+          type: string
+          example: 2020/04/30 22:08:24
+tags:
+  - name: ClientData
+    description: client data
